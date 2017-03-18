@@ -1,0 +1,332 @@
+test spacing from ./spacing/
+
+spacing01.txt => sucess
+spacing02.txt => sucess
+spacing03.txt => sucess
+
+spacing01_failure.txt => fail
+
+comment01.txt => sucess
+comment02.txt => sucess
+comment03.txt => sucess
+
+comment01_failure.txt => fail
+comment02_failure.txt => fail
+
+line_comment01.txt => sucess
+line_comment02.txt => sucess
+
+line_comment01_failure.txt => fail
+line_comment02_failure.txt => fail
+
+-----------------------------------------------------------
+
+test types from ./types/
+
+int01.txt => fail
+int02.txt => sucess
+int03.txt => sucess
+int04.txt => sucess
+
+int01_failure.txt => fail
+int02_failure.txt => fail
+int03_failure.txt => fail
+
+float01.txt => fail
+float02.txt => sucess
+float03.txt => sucess
+float04.txt => sucess
+
+float01_failure.txt => fail
+float02_failure.txt => fail
+float03_failure.txt => fail
+
+boolean01.txt => fail
+boolean02.txt => sucess
+boolean03.txt => sucess
+boolean04.txt => sucess
+
+boolean01_failure.txt => fail
+boolean02_failure.txt => fail
+boolean03_failure.txt => fail
+
+string01.txt => fail
+string02.txt => sucess
+string03.txt => sucess
+string04.txt => sucess
+
+string01_failure.txt => fail
+string02_failure.txt => fail
+string03_failure.txt => fail
+
+grammar01.txt => fail
+grammar02.txt => sucess
+grammar03.txt => sucess
+grammar04.txt => sucess
+
+grammar01_failure.txt => fail
+grammar02_failure.txt => fail
+grammar03_failure.txt => fail
+
+rule01.txt => fail
+rule02.txt => sucess
+rule03.txt => sucess
+rule04.txt => sucess
+
+rule01_failure.txt => fail
+rule02_failure.txt => fail
+rule03_failure.txt => fail
+
+------------------------------------------------------------------------------
+
+test operators from ./operators/
+
+and01.txt => sucess
+
+and01_failure.txt => fail
+and02_failure.txt => fail
+
+or01.txt => sucess
+
+or01_failure.txt => fail
+or02_failure.txt => fail
+
+not01.txt => sucess
+
+not01_failure.txt => fail
+not02_failure.txt => fail
+
+equal01.txt => sucess
+
+equal01_failure.txt => fail
+equal02_failure.txt => fail
+
+menor01.txt => sucess
+
+menor01_failure.txt => fail
+menor02_failure.txt => fail
+
+maior01.txt => sucess
+
+maior01_failure.txt => fail
+maior02_failure.txt => fail
+
+menor_igual01.txt => sucess
+
+menor_igual01_failure.txt => fail
+menor_igual02_failure.txt => fail
+
+maior_igual01.txt => sucess
+
+maior_igual01_failure.txt => fail
+maior_igual02_failure.txt => fail
+
+
+not_equal01.txt => sucess
+
+not_equal01_failure.txt => fail
+not_equal02_failure.txt => fail
+
+add01.txt => sucess
+
+add01_failure.txt => fail
+add02_failure.txt => fail
+
+sub01.txt => sucess
+
+sub01_failure.txt => fail
+sub02_failure.txt => fail
+
+mul01.txt => sucess
+
+mul01_failure.txt => fail
+mul02_failure.txt => fail
+
+div01.txt => sucess
+
+div01_failure.txt => fail
+div02_failure.txt => fail
+
+
+mod01.txt.txt => sucess
+
+mod01_failure.txt => fail
+mod02_failure.txt => fail
+
+----------------------------------------------------------------------------
+
+test grammar from ./preamble_grammar/
+
+grammar01.txt => sucess
+grammar02.txt => sucess
+grammar03.txt => sucess
+grammar04.txt => sucess
+grammar05.txt => sucess
+grammar06.txt => sucess
+grammar07.txt => sucess
+
+--------------------------------------------------------------------------------
+
+test metarule from ./metaprogramming/
+
+meta01.apeg => sucess
+meta02.apeg => sucess
+meta03.apeg => sucess
+
+meta01_failure.txt => fail
+meta02_failure.txt => fail
+meta03_failure.txt => fail
+
+--------------------------------------------------------------------------------
+
+test option from ./option/
+
+option01.txt => sucess
+option02.txt => sucess
+
+option01_failure.txt => fail
+
+grammar_opt01.txt => sucess
+grammar_opt02.txt => sucess
+
+grammar_opt01_failure.txt => fail
+grammar_opt02_failure.txt => fail
+
+--------------------------------------------------------------------------------
+
+test lexical from ./lexical/
+
+literal_string01.txt => sucess
+literal_string02.txt => sucess
+
+escape01.txt => sucess
+escape02.txt => sucess
+escape03.txt => sucess
+
+true01.txt => sucess
+true02.txt => sucess
+
+true01_failure.txt => fail
+true02_failure.txt => fail
+
+false01.txt => sucess
+false02.txt => sucess
+
+false01_failure.txt => fail
+false02_failure.txt => fail
+
+id01.txt => sucess
+id02.txt => sucess
+
+id01_failure.txt => fail
+id02_failure.txt => fail
+
+int_number01.txt => sucess
+int_number02.txt => sucess
+
+int_number01_failure.txt => fail
+int_number02_failure.txt => fail
+int_number03_failure.txt => fail
+
+real_number01.txt => sucess
+real_number02.txt => sucess
+real_number03.txt => sucess
+
+real_number01_failure.txt => fail
+real_number02_failure.txt => fail
+
+----------------------------------------------------------------------------------------
+
+test rule from ./grammar_rule/
+
+rule01.txt => sucess
+rule02.txt => sucess
+rule03.txt => sucess
+rule04.txt => sucess
+rule05.txt => sucess
+rule06.txt => sucess
+
+rule01_failure.txt => fail
+rule02_failure.txt => fail
+rule03_failure.txt => fail
+rule04_failure.txt => fail
+
+-------------------------------------------------------------------------------------
+
+test functions from ./functions/
+
+functions01.txt => sucess
+functions02.txt => sucess
+
+functions01_failure.txt => fail
+functions02_failure.txt => fail
+
+----------------------------------------------------------------------------------------
+
+test attributes from ./attributes/
+
+decls01.txt => sucess
+
+varDecl01.txt => sucess
+varDecl02.txt => sucess
+
+optLocals01.txt => sucess
+optLocals02.txt => sucess
+
+optLocals01_failure.txt => fail
+optLocals02_failure.txt => fail
+optLocals03_failure.txt => fail
+
+optReturn01.txt => sucess
+optReturn02.txt => sucess
+
+optReturn01_failure.txt => fail
+optReturn02_failure.txt => fail
+optReturn03_failure.txt => fail
+
+-------------------------------------------------------------------------------------------
+
+test expr from ./expression/
+
+arithmetic01.apeg => sucess
+arithmetic02.apeg => sucess
+relational01.apeg => sucess
+relational02.apeg => sucess
+relational03.apeg => sucess
+relational04.apeg => sucess
+boolean01.apeg => sucess
+boolean02.apeg => sucess
+boolean03.apeg => sucess
+boolean04.apeg => sucess
+
+arithmetic01_failure.apeg => fail
+arithmetic02_failure.apeg => fail
+relational01_failure.apeg => fail
+relational02_failure.apeg => fail
+relational03_failure.apeg => fail
+boolean01_failure.apeg => fail
+boolean02_failure.apeg => fail
+boolean03_failure.apeg => fail
+
+----------------------------------------------------------------------------------
+
+test pexpr from ./apeg_expression/
+
+pexpr01.apeg => sucess
+pexpr02.apeg => sucess
+pexpr03.apeg => sucess
+pexpr04.apeg => sucess
+
+pexpr01_failure.apeg => fail
+pexpr02_failure.apeg => fail
+pexpr03_failure.apeg => fail
+pexpr04_failure.apeg => fail
+pexpr05_failure.apeg => fail
+pexpr06_failure.apeg => fail
+pexpr07_failure.apeg => fail
+pexpr08_failure.apeg => fail
+pexpr09_failure.apeg => fail
+pexpr10_failure.apeg => fail
+pexpr11_failure.apeg => fail
+pexpr12_failure.apeg => fail
+pexpr13_failure.apeg => fail
