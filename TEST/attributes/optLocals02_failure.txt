@@ -1,0 +1,1 @@
+locals [ nome, INT_TYPE nome2]

@@ -1,0 +1,1 @@
+[ INT_TYPE nome, RULE_TYPE nome2]

@@ -1,0 +1,1 @@
+returns [ FLOAT_TYPE nome, BOOLEAN_TYPE nome2]
