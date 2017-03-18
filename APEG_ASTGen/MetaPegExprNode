@@ -1,0 +1,2 @@
+class MetaPegExprNode(ExprNode):
+	properties = dict(expression = "ExprNode")

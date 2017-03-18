@@ -1,0 +1,2 @@
+class FloatExprNode(ExprNode):
+	properties = dict(value = double)

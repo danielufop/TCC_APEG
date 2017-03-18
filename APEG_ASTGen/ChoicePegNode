@@ -1,0 +1,2 @@
+class ChoicePegNode(PegNode):
+	properties = dict(left = "PegNode", right = "PegNode")

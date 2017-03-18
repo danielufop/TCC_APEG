@@ -1,0 +1,4 @@
+typedef std::list<Expr> listExpr
+
+class CallExprNode(ExprNode):
+	properties = dict(name = String, parameters = listExpr)

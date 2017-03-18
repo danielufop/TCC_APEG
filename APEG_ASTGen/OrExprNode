@@ -1,0 +1,2 @@
+class OrExprNode(ExprNode):
+	properties = dict(left = "ExprNode", right = "ExprNode")

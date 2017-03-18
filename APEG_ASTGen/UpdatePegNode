@@ -1,0 +1,4 @@
+AssignmentNode = ListOf(AssignmentNode, TypeName = "assignNode")
+
+class UpdatePegNode(PegNode):
+	properties = dict(assigns = assignNode)

@@ -1,0 +1,2 @@
+class VarDeclarationNode(ElementVisitor):
+	properties = dict(name = String, tipo = "TypeNode")

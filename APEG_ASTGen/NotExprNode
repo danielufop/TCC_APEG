@@ -1,0 +1,2 @@
+class NotExprNode(ExprNode):
+	properties = dict(expression = "ExprNode")

@@ -1,0 +1,8 @@
+GrammarOption = EnumType("grammarOption", "ADAPTABLE", NO_ADAPTABLE", "MEMOIZE", "NO_MEMOIZE", "USUAL_SEMANTICS", 						"SIMPLE_ENV_SEMANTICS")
+
+ListOf(String, TypeName = "retorno")
+ListOf(GrammarOption, TypeName = "grammarReturn")
+ListOf(RuleNode, TypeName = "regras")
+
+class GrammarNode(ElementVisitor):
+	properties = dict(name = String, opt = grammarReturn, pream = String, funct = retorno, functSource = 						retorno, rulesName = regras)

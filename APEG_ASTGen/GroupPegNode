@@ -1,0 +1,2 @@
+class GroupPegNode(PegNode):
+	properties = dict(ranges = String)

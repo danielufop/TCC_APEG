@@ -1,0 +1,2 @@
+class BindPegNode(PegNode):
+	properties = dict(var = String, peg = "PegNode")

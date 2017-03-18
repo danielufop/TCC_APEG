@@ -1,0 +1,6 @@
+Annotation = EnumType("Annotation", "MEMOIZE", "TRANSIENT", "NONE")
+
+VarDeclaration = ListOf(VarDeclarationNode, TypeName = "varDeclar")
+
+class RuleNode(ElementVisitor):
+	properties = dict(name = String, annot = Annotation, parameters = varDeclar, returno = varDeclar, 						expression = "PegNode")

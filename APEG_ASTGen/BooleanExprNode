@@ -1,2 +1,2 @@
 class BooleanExprNode(ExprNode):
-	properties = dict(bol = boolean)
+	properties = dict(bool = boolean)

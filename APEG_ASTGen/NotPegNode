@@ -1,0 +1,2 @@
+class NotPegNode(PegNode):
+	properties = dict(peg = "PegNode")

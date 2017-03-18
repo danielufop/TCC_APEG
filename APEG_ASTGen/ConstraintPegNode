@@ -1,0 +1,2 @@
+class ConstraintPegNode(PegNode):
+	properties = dict(expression = "ExprNode")

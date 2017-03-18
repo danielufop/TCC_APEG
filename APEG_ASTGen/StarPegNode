@@ -1,0 +1,2 @@
+class StarPegNode(PegNode):
+	properties = dict(peg = "PegNode")

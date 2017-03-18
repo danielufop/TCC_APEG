@@ -1,2 +1,2 @@
 class AssignmentNode(ElementVisitor):
-	properties = dict( left = String, right = ExprNode)
+	properties = dict( left = String, right = "ExprNode")

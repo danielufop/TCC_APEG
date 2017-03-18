@@ -1,0 +1,4 @@
+EqualityOperator = EnumType("EqualityOperator", "NE", "EQ")
+
+class EqualityExprNode(ExprNode):
+	properties = dict(eqOperator = EqualityOperator, left = "ExprNode", right = "ExprNode", equalOper = 					"EqualityOperator")

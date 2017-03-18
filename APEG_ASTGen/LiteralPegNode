@@ -1,0 +1,2 @@
+class LiteralPegNode(PegNode):
+	properties = dict(valor = String)

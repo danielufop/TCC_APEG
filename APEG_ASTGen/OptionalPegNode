@@ -1,0 +1,2 @@
+class OptionalPegNode(PegNode):
+	properties = dict(peg = "PegNode")

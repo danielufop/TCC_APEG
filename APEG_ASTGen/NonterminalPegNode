@@ -1,0 +1,4 @@
+ListOf(ExprNode, TypeName = "expressions")
+
+class NonterminalPegNode(PegNode):
+	properties = dict(name = String, exprs = expressions)

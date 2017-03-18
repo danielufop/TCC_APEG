@@ -1,0 +1,4 @@
+PegNode = ListOf(PegNode, TypeName = "pegNodes")
+
+class SequencePegNode(PegNode):
+	properties = dict(pegs = pegNodes)
