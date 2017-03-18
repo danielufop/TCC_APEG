@@ -1,0 +1,2 @@
+class AttributeExprNode(ExprNode):
+	properties = dict(name = String)

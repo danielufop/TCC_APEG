@@ -1,0 +1,2 @@
+class AndExprNode(ExprNode):
+	properties = dict(left = "ExprNode", right = "ExprNode")

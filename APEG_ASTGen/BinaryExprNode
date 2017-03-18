@@ -1,0 +1,4 @@
+Operator = EnumType("Operator", "GT", "GE", "LT", "LE", "ADD", "SUB", "MUL", "DIV", "MOD")
+
+class BinaryExprNode(ExprNode):
+	properties = dict(op = Operator, left = "ExprNode", right = "ExprNode")

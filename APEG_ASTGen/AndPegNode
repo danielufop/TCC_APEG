@@ -1,0 +1,2 @@
+class AndPegNode(PegNode):
+	properties = dict(op = PegNode)
