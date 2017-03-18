@@ -1,0 +1,108 @@
+module apeg_expression;
+import expression;
+import spacing;
+import lexical;
+
+/*
+peg_expr returns[PegNode peg]:
+  peg_seq '/' peg_expr {$peg = factory.newChoicePeg($peg_seq.peg, $peg_expr.peg);}
+ |
+  peg_seq {$peg = $peg_seq.peg;}
+;
+*/
+public void peg_expr = peg_seq ws '/' ws peg_expr ws / peg_seq ws;
+
+
+/*
+peg_seq returns[PegNode peg]: 
+   p1=peg_capturetext {List<PegNode> l = new ArrayList<PegNode>(); l.add($p1.peg);}
+   (p2=peg_capturetext {l.add($p2.peg);})+ {$peg = factory.newSequencePeg(l);}
+  |
+   peg_capturetext {$peg = $peg_capturetext.peg;}
+  |
+   {$peg = factory.newLambdaPeg();}// LAMBDA parsing expression
+;
+*/
+public void peg_seq = peg_capturetext ws;
+
+
+/*
+peg_capturetext returns[PegNode peg]:
+   peg_unary_op {$peg = $peg_unary_op.peg;}
+  |
+   attribute_ref '=' peg_unary_op
+    {$peg = factory.newBindPeg($attribute_ref.exp, $peg_unary_op.peg);}
+;
+*/
+public void peg_capturetext = attribute_ref ws '=' ws peg_unary_op ws / peg_unary_op ws;
+
+/*
+peg_unary_op returns[PegNode peg]:
+   peg_factor '?' {$peg = factory.newOptionalPeg($peg_factor.peg);}
+  | 
+   peg_factor '*' {$peg = factory.newStarPeg($peg_factor.peg);}
+  | 
+   peg_factor '+' {$peg = factory.newPlusPeg($peg_factor.peg);}
+  |
+   peg_factor {$peg = $peg_factor.peg;}
+  |
+   '&' peg_factor {$peg = factory.newAndPeg($peg_factor.peg);}
+  |
+   '!' peg_factor {$peg = factory.newNotPeg($peg_factor.peg);}
+  |
+   '{?' condExpr '}' {$peg = factory.newConstraintPeg($condExpr.exp);}
+  |
+   '{' st1=assign
+     {List<AssignmentNode> l = new ArrayList<AssignmentNode>();
+      l.add($st1.stm);
+     } (st2=assign {l.add($st2.stm);})*
+   '}' {$peg = factory.newUpdatePeg(l);}
+;
+*/
+public void peg_unary_op = "{?" ws condExpr ws '}' ws / '{' ws assign ws (assign)* ws '}' ws / '!' ws peg_factor ws / ws '&' ws peg_factor ws / peg_factor ws '+' ws / peg_factor ws '*' ws / peg_factor ws '?' ws / peg_factor ws;
+
+/*
+peg_factor returns[PegNode peg]:
+   STRING_LITERAL { 
+     String s = $STRING_LITERAL.text;
+     s = s.substring(1, s.length()-1);
+     $peg = factory.newLiteralPeg(s);
+   }
+  |
+   ntcall {$peg = $ntcall.peg;}
+  |
+   '[' range_pair ']' {$peg = factory.newGroupPeg($range_pair.text);}
+  |
+   '.' {$peg = factory.newAnyPeg();}
+  |
+   '(' peg_expr ')' {$peg = $peg_expr.peg;}
+;
+*/
+public void peg_factor = '.' ws / '(' ws peg_expr ws ')' ws / '[' ws range_pair ws ']' ws / STRING_LITERAL / ntcall ws;
+
+
+
+/*
+ntcall returns[PegNode peg]:
+   ID '<' actPars '>' {$peg = factory.newNonterminalPeg($ID.text, $actPars.list);}
+  |
+   ID {$peg = factory.newNonterminalPeg($ID.text, new ArrayList<ExprNode>());}
+;
+*/
+public void ntcall = ID ws '<' ws actPars ws '>' ws / ID;
+
+
+/*
+range_pair:
+  single_pair
+ |
+  single_pair ('-' single_pair)+
+;
+*/
+public void range_pair = single_pair ws ( '-' ws single_pair)+ ws / single_pair ws;
+
+
+/*
+single_pair: ID | INT_NUMBER | ESC;
+*/
+public void single_pair = ESC / INT_NUMBER / ID;

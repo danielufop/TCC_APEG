@@ -1,0 +1,12 @@
+module metaprogramming;
+import expression;
+import spacing;
+
+/*
+meta_peg returns[MetaPegExprNode exp]:
+'@[' expr ']'
+  {$exp = factory.newMetaPeg($expr.exp); }
+*/
+
+//expr é um não terminal
+public void meta_peg = "@[" ws? expr ws? ']';

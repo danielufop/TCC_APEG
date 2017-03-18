@@ -1,0 +1,203 @@
+module expression;
+import metaprogramming;
+import spacing;
+import operators;
+import lexical;
+
+/* 
+assign returns[AssignmentNode stm]:
+  attribute_ref '=' expr ';'
+     {$stm = factory.newAssignment($attribute_ref.exp, $expr.exp);}
+;
+*/
+public void assign = attribute_ref ws '=' ws expr ws ';' ;
+
+/* 
+expr returns[ExprNode exp]: condExpr {$exp = $condExpr.exp;};
+*/
+public void expr = condExpr ws;
+
+
+/*
+condExpr returns[ExprNode exp]:
+   or_cond {$exp = $or_cond.exp;}
+ |
+   e1=or_cond (equalityOp e2=or_cond
+   	 {$exp = factory.newEqualityExpr($e1.exp, $e2.exp, $equalityOp.op);}
+   )+
+;
+*/
+public void condExpr = or_cond ws (equalityOp or_cond)+ ws / or_cond ws;
+
+/*
+or_cond returns[ExprNode exp]:
+   and_cond {$exp = $and_cond.exp;}
+  |
+   e1=and_cond (OP_OR e2=and_cond {$exp = factory.newOrExpr($e1.exp, $e2.exp);})+
+;
+*/
+public void or_cond = and_cond ws (OP_OR and_cond)+ ws / and_cond ws;
+
+/*
+and_cond returns[ExprNode exp]:
+  bool_expr {$exp = $bool_expr.exp;}    
+ |
+  e1=bool_expr (OP_AND e2=bool_expr {$exp = factory.newAndExpr($e1.exp, $e2.exp);})+
+;
+*/
+public void and_cond = bool_expr ws (OP_AND bool_expr)+ ws / bool_expr ws;
+
+
+/*
+bool_expr returns[ExprNode exp]:  
+   aexpr {$exp = $aexpr.exp;}
+ |
+  e1=aexpr relOp e2=aexpr
+   {$exp = factory.newBinaryExpr($e1.exp, $e2.exp, $relOp.op);}
+;
+*/
+public void bool_expr = aexpr ws relOp ws aexpr ws / aexpr ws;
+
+
+/*
+aexpr returns[ExprNode exp]:
+    termOptUnary {$exp = $termOptUnary.exp;}
+  |
+    termOptUnary (addOp term)+
+     {$exp = factory.newBinaryExpr($termOptUnary.exp, $term.exp, $addOp.op);}
+;
+*/
+public void aexpr = termOptUnary ws (addOp term)+ ws / termOptUnary ws;
+
+/*
+termOptUnary returns[ExprNode exp]:
+   OP_SUB term {$exp = factory.newMinusExpr($term.exp);}
+  |
+   term {$exp = $term.exp;}
+;
+*/
+public void termOptUnary = OP_SUB term ws / term ws;
+
+/*
+term returns[ExprNode exp]:
+   factor {$exp = $factor.exp;}
+  |
+   e1=factor (mulOp e2=factor)+
+    {$exp = factory.newBinaryExpr($e1.exp, $e2.exp, $mulOp.op);}
+;
+*/
+public void term = factor ws (mulOp factor)+ ws / factor ws;
+
+
+/*
+factor returns[ExprNode exp]:
+   attrORfuncall {$exp = $attrORfuncall.exp;}
+  |
+   number {$exp = $number.exp;}
+  |
+   STRING_LITERAL
+    { 
+      String s = $STRING_LITERAL.text;
+      s = s.substring(1, s.length()-1);
+      $exp = factory.newStringExpr(s);
+    }
+  |
+   '(' expr ')' {$exp = $expr.exp;}
+  |
+   '!' factor {$exp = factory.newNotExpr($factor.exp);}
+  |
+   TRUE {$exp = factory.newBooleanExpr(true);}
+  |
+   FALSE {$exp = factory.newBooleanExpr(false);}
+  |
+   meta_peg {$exp = $meta_peg.exp;}
+;
+*/
+public void factor = TRUE / FALSE / meta_peg / '!'factor / '(' ws expr ws ')' / STRING_LITERAL / number / attrORfuncall;
+
+
+/*
+attrORfuncall returns[ExprNode exp]:
+   ID '(' actPars ')' {$exp = factory.newCallExpr($ID.text, $actPars.list);}
+  |
+   attribute_ref {$exp = $attribute_ref.exp;}
+;
+*/
+public void attrORfuncall = ID ws '(' ws actPars ws ')' ws / attribute_ref ws;
+
+/*
+attribute_ref returns[AttributeExprNode exp]:
+  ID {$exp = factory.newAttributeExpr($ID.text);}
+ |
+  '$g' {$exp = factory.newAttributeGrammarExpr();}
+;
+*/
+public void attribute_ref = "$g" ws / ID;
+
+
+/*
+number returns[ExprNode exp]:
+   INT_NUMBER {$exp = factory.newIntExpr(Integer.parseInt($INT_NUMBER.text));}
+  |
+   REAL_NUMBER {$exp = factory.newFloatExpr(Double.parseDouble($REAL_NUMBER.text));}
+;
+*/
+public void number = INT_NUMBER / REAL_NUMBER;
+
+
+/*
+actPars returns[List<ExprNode> list]:
+   {$list = new ArrayList<ExprNode>();} e1=aexpr {$list.add($e1.exp);}
+    (',' e2=aexpr {$list.add($e2.exp);})*
+  |
+    {$list = new ArrayList<ExprNode>();}
+;
+*/
+public void actPars = aexpr ws (',' aexpr)* ws;
+
+
+/*
+equalityOp returns[EqualityExprNode.EqualityOperator op]:
+  OP_NE {$op = EqualityExprNode.EqualityOperator.NE;}
+ |
+  OP_EQ {$op = EqualityExprNode.EqualityOperator.EQ;};
+*/
+public void equalityOp = OP_NE / OP_EQ;
+
+
+/*
+relOp returns[BinaryExprNode.Operator op]:
+   
+  |
+   OP_LT {$op = BinaryExprNode.Operator.LT;}
+  |
+   OP_GT {$op = BinaryExprNode.Operator.GT;}
+  |
+   OP_LE {$op = BinaryExprNode.Operator.LE;}
+  |
+   OP_GE {$op = BinaryExprNode.Operator.GE;}
+;
+*/
+public void relOp = OP_LE / OP_GE / OP_LT / OP_GT;
+
+
+/*
+addOp returns[BinaryExprNode.Operator op]:
+   OP_ADD {$op = BinaryExprNode.Operator.ADD;}
+  |
+   OP_SUB {$op = BinaryExprNode.Operator.SUB;}
+;
+*/
+public void addOp = OP_ADD / OP_SUB;
+
+
+/*
+mulOp returns[BinaryExprNode.Operator op]:
+   OP_MUL {$op = BinaryExprNode.Operator.MUL;}
+  |
+   OP_DIV {$op = BinaryExprNode.Operator.DIV;}
+  |
+   OP_MOD {$op = BinaryExprNode.Operator.MOD;}
+;
+*/
+public void mulOp = OP_MUL / OP_DIV / OP_MOD;

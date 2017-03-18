@@ -1,0 +1,70 @@
+module attributes;
+import types;
+import lexical;
+import spacing;
+
+/*
+optDecls returns[List<VarDeclarationNode> list]:
+   decls {$list = $decls.list;}
+  |
+   {$list = new ArrayList<VarDeclarationNode>();}
+;
+*/
+public void optDecls = decls;
+
+
+/*
+optReturn returns[List<VarDeclarationNode> list]:
+   'returns' decls {$list = $decls.list;}
+  |
+   {$list = new ArrayList<VarDeclarationNode>();}
+;
+*/
+public void optReturn = "returns" ws decls;
+
+
+/*
+optLocals returns[List<VarDeclarationNode> list]:
+   'locals' decls {$list = $decls.list;}
+  |
+   {$list = new ArrayList<VarDeclarationNode>();}
+;
+*/
+public void optLocals = "locals" ws decls;
+
+
+/*
+decls returns[List<VarDeclarationNode> list]:
+  '[' {$list = new ArrayList<VarDeclarationNode>();} 
+  v1=varDecl {$list.add($v1.var);} (',' v2=varDecl {$list.add($v2.var);})* ']'
+;
+*/
+public void decls = '[' ws? varDecl ws? (',' varDecl)*  ws? ']';
+
+
+/*
+varDecl returns[VarDeclarationNode var]:
+  type ID {$var = factory.newVarDeclaration($ID.text, $type.tp);}
+;
+*/
+public void varDecl = type ws ID;
+
+
+/*
+type returns[TypeNode tp]:
+  INT_TYPE {$tp = factory.newIntType();}
+ |
+  FLOAT_TYPE {$tp = factory.newFloatType();}
+ |
+  BOOLEAN_TYPE {$tp = factory.newBooleanType();}
+ |
+  STRING_TYPE {$tp = factory.newStringType();}
+ |
+  GRAMMAR_TYPE {$tp = factory.newGrammarType();}
+ |
+  RULE_TYPE {$tp = factory.newRuleType();}
+ |
+  ID {$tp = factory.newType($ID.text);}
+;
+*/
+public void type = INT_TYPE / FLOAT_TYPE / BOOLEAN_TYPE / STRING_TYPE / GRAMMAR_TYPE / RULE_TYPE / ID;

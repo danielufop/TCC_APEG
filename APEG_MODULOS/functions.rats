@@ -1,0 +1,16 @@
+module functions;
+import lexical;
+import spacing;
+
+/*
+functions returns[List<String> func, List<String> func_sources]:
+   {$func = new ArrayList<String>();}
+   {$func_sources = new ArrayList<String>();}
+   'functions' (f=ID {$func.add($f.text);})*
+   'from' '{' (s=ID {$func_sources.add($s.text);})+ '}' ';'
+  |
+   {$func = new ArrayList<String>();}
+   {$func_sources = new ArrayList<String>();}
+;
+*/
+public void functions = "functions" ws ID* ws "from" ws '{' ws? ID+ ws? '}' ws? ';' ;

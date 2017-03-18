@@ -1,0 +1,92 @@
+module lexical;
+import spacing;
+
+/*
+STRING_LITERAL: '\'' LITERAL_CHAR* '\'';
+*/
+public void STRING_LITERAL = '\'' LITERAL_CHAR* '\'';
+
+
+
+//DÚVIDA NESSA PARTE
+/*
+fragment LITERAL_CHAR
+  : ESC
+  | ~('\''|'\\')
+  ;
+*/
+transient void LITERAL_CHAR = ESC / (!('\'' / '\\') _ ); /* ('\'' | '\\') */
+
+
+
+
+//DÚVIDA NO FINAL DESSA PARTE
+/*
+ESC : '\\'
+    ( 'n'
+    | 'r'
+    | 't'
+    | 'b'
+    | 'f'
+    | '"'
+    | '\''
+    | '\\'
+    | 'u' XDIGIT XDIGIT XDIGIT XDIGIT
+    | . // unknown, leave as it is
+    )
+  ;
+*/
+public void ESC = '\\' ('n' / 'r' / 't' / 'b' / 'f' / '"' / '\'' / '\\' / 'u' XDIGIT XDIGIT XDIGIT XDIGIT / '_') ;
+
+/*
+fragment XDIGIT :
+    '0' .. '9'
+  | 'a' .. 'f'
+  | 'A' .. 'F'
+  ;
+*/
+transient void XDIGIT = [0-9a-fA-F];
+
+
+/*
+fragment LETTER : 'a'..'z' | 'A'..'Z';
+*/
+transient void LETTER = [a-z];
+
+
+/*
+fragment DIGIT : '0'..'9';
+*/
+transient void DIGIT = [0-9];
+
+
+/*
+TRUE : 'true';
+FALSE : 'false';
+ID : LETTER (LETTER | DIGIT | '_')*;
+INT_NUMBER : DIGIT+;
+*/
+public void TRUE = "true" ws;
+public void FALSE = "false" ws;
+public void ID = LETTER (LETTER / DIGIT / '_')*;
+public void INT_NUMBER = DIGIT+ ws;
+
+
+
+
+/*
+REAL_NUMBER :
+  DIGIT+ ('.' DIGIT*)? EXPONENT?
+  |
+  '.' DIGIT+ EXPONENT?
+  ;
+*/
+public void REAL_NUMBER = '.' DIGIT+ EXPOENT? ws / DIGIT+ ('.' DIGIT*)? EXPOENT? ws;
+
+
+
+/*
+fragment EXPONENT : ('e'|'E') ('+'|'-')? DIGIT+ ;
+*/
+transient void EXPOENT = ('e' / 'E') ('+' / '-' )? DIGIT+;
+

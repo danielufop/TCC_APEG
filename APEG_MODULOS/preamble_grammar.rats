@@ -1,0 +1,16 @@
+module preamble_grammar;
+import lexical;
+import option;
+import grammar_rule;
+import functions;
+import spacing;
+
+/*
+grammarDef returns[apeg.parse.ast.GrammarNode gram]:
+  'apeg' ID ';' option header functions rules
+  {$gram = factory.newGrammar($ID.text, $option.list, $header.h,
+  	                  $rules.list, $functions.func, $functions.func_sources);
+  }
+;
+*/
+public void grammarDef = "apeg" ws ID ws? ';' ws? option ws? header ws? functions ws? rules ws?;

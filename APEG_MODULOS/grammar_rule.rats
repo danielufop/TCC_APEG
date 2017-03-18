@@ -1,0 +1,42 @@
+module grammar_rule;
+import lexical;
+import attributes;
+import expression_choice;
+import spacing;
+
+
+/*
+rules returns[List<apeg.parse.ast.RuleNode> list]:
+   {$list = new ArrayList<apeg.parse.ast.RuleNode>();}
+   (r=production {$list.add($r.rule);})+
+;
+*/
+public void rules = (production)+;
+
+
+/*
+production returns[apeg.parse.ast.RuleNode rule]:
+   annotation ID optDecls optReturn optLocals ':' peg_expr ';'
+   {$rule = factory.newRule($ID.text, $annotation.anno, $optDecls.list,
+   	                        $optReturn.list, $peg_expr.peg);
+   }
+  |
+   ID optDecls optReturn optLocals ':' peg_expr ';'
+   {$rule = factory.newRule($ID.text, apeg.parse.ast.RuleNode.Annotation.NONE,
+   	                        $optDecls.list, $optReturn.list, $peg_expr.peg);
+   }
+;
+*/
+public void production = annotation ws ID ws optDecls ws optReturn ws optLocals ws? ':' ws? peg_expr ws? ';' / ID ws optDecls ws optReturn ws optLocals ws? ':' ws? peg_expr ws? ';';
+
+
+/*
+annotation returns[apeg.parse.ast.RuleNode.Annotation anno]:
+   // to use together with the option memoize=false
+   '@memoize' {$anno = apeg.parse.ast.RuleNode.Annotation.MEMOIZE;}
+  |
+   // to use together with the option memoize=true
+   '@transient' {$anno = apeg.parse.ast.RuleNode.Annotation.TRANSIENT;}
+  ;
+*/
+public void annotation = "@memoize" ws / "@transient" ws;

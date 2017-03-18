@@ -1,0 +1,19 @@
+module operators;
+
+//APEG Operators
+
+public void OP_AND = "&&";
+public void OP_OR = "||";
+public void OP_NOT = "!";
+public void OP_EQ = "==";
+public void OP_LT = "<";
+public void OP_GT = ">";
+public void OP_LE = "<=";
+public void OP_GE = ">=";
+public void OP_NE = "!=";
+public void OP_ADD = '+';
+public void OP_SUB = '-';
+public void OP_MUL = '*';
+public void OP_DIV = '/';
+public void OP_MOD = '%';
+
