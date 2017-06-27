@@ -1,0 +1,199 @@
+module apeg_expression;
+import expression;
+import spacing;
+import lexical;
+
+/* 
+assign returns[AssignmentNode stm]:
+	attribute_ref ws '=' ws expr ws ';'
+    {$stm = factory.newAssignment($attribute_ref.exp, $expr.exp);}
+;
+*/
+public AssignmentNode assign = 
+	e:attribute_ref ws '=' ws f:expr ws ';'
+    {yyValue = factory.newAssignment(e, f);}
+;
+
+
+
+/*
+peg_expr returns[PegNode peg]:
+  peg_seq '/' peg_expr {$peg = factory.newChoicePeg($peg_seq.peg, $peg_expr.peg);}
+ |
+  peg_seq {$peg = $peg_seq.peg;}
+;
+*/
+public PegNode peg_expr = 
+	e:peg_seq ws '/' ws e1:peg_expr {yyValue = factory.newChoicePeg(e, e1);}
+ /
+	e:peg_seq {yyValue = e}
+;
+
+
+
+/*
+peg_seq returns[PegNode peg]: 
+   p1=peg_capturetext {List<PegNode> l = new ArrayList<PegNode>(); l.add($p1.peg);}
+   (p2=peg_capturetext {l.add($p2.peg);})+ {$peg = factory.newSequencePeg(l);}
+  |
+   peg_capturetext {$peg = $peg_capturetext.peg;}
+  |
+   {$peg = factory.newLambdaPeg();}// LAMBDA parsing expression
+;
+*/
+public PegNode peg_seq = 
+	p1:peg_capturetext {List<PegNode> l = new ArrayList<PegNode>(); l.add(p1);}
+	(p2:peg_capturetext {l.add(p2);})+ {yyValue = factory.newSequencePeg(l);}
+  /
+	p:peg_capturetext {yyValue = p}
+  /
+	{yyValue = factory.newLambdaPeg();}// LAMBDA parsing expression
+;
+
+
+
+/*
+peg_capturetext returns[PegNode peg]:
+   peg_unary_op {$peg = $peg_unary_op.peg;}
+  |
+   attribute_ref '=' peg_unary_op
+    {$peg = factory.newBindPeg($attribute_ref.exp, $peg_unary_op.peg);}
+;
+*/
+public PegNode peg_capturetext = 
+//attribute_ref ws '=' ws peg_unary_op ws / peg_unary_op ws;
+	
+	e:peg_unary_op ws {yyValue = e}
+  /
+	f:attribute_ref ws '=' ws e:peg_unary_op ws
+    {yyValue = factory.newBindPeg(f, e);}
+;
+
+
+
+/*
+peg_unary_op returns[PegNode peg]:
+   peg_factor '?' {$peg = factory.newOptionalPeg($peg_factor.peg);}
+  | 
+   peg_factor '*' {$peg = factory.newStarPeg($peg_factor.peg);}
+  | 
+   peg_factor '+' {$peg = factory.newPlusPeg($peg_factor.peg);}
+  |
+   peg_factor {$peg = $peg_factor.peg;}
+  |
+   '&' peg_factor {$peg = factory.newAndPeg($peg_factor.peg);}
+  |
+   '!' peg_factor {$peg = factory.newNotPeg($peg_factor.peg);}
+  |
+   '{?' condExpr '}' {$peg = factory.newConstraintPeg($condExpr.exp);}
+  |
+   '{' st1=assign
+     {List<AssignmentNode> l = new ArrayList<AssignmentNode>();
+      l.add($st1.stm);
+     } (st2=assign {l.add($st2.stm);})*
+   '}' {$peg = factory.newUpdatePeg(l);}
+;
+*/
+public PegNode peg_unary_op = 
+//"{?" ws condExpr ws '}' ws / '{' ws assign ws (assign)* ws '}' ws / '!' ws peg_factor ws / 
+//ws '&' ws peg_factor ws / peg_factor ws '+' ws / peg_factor ws '*' ws / peg_factor ws '?' ws / peg_factor ws;
+	
+	e6:peg_factor ws '?' ws {yyValue = factory.newOptionalPeg(e6);}
+  / 
+	e5:peg_factor ws '*' ws {yyValue = factory.newStarPeg(e5);}
+  / 
+	e4:peg_factor ws '+' ws {yyValue = factory.newPlusPeg(e4);}
+  /
+	e3:peg_factor ws {yyValue = e3;}
+  /
+	'&' ws e2:peg_factor ws {yyValue = factory.newAndPeg(e2);}
+  /
+	'!' ws e1:peg_factor ws {yyValue = factory.newNotPeg(e1);}
+  /
+	"{?" ws e:condExpr ws '}' ws {yyValue = factory.newConstraintPeg(e);}
+  /
+	'{' ws st1:assign ws
+		{List<AssignmentNode> l = new ArrayList<AssignmentNode>();
+		l.add(st1);
+		} (st2:assign {l.add(st2);})* ws '}' {yyValue = factory.newUpdatePeg(l);}
+;
+	
+
+
+/*
+peg_factor returns[PegNode peg]:
+   STRING_LITERAL { 
+     String s = $STRING_LITERAL.text;
+     s = s.substring(1, s.length()-1);
+     $peg = factory.newLiteralPeg(s);
+   }
+  |
+   ntcall {$peg = $ntcall.peg;}
+  |
+   '[' range_pair ']' {$peg = factory.newGroupPeg($range_pair.text);}
+  |
+   '.' {$peg = factory.newAnyPeg();}
+  |
+   '(' peg_expr ')' {$peg = $peg_expr.peg;}
+;
+*/
+public PegNode peg_factor = 
+//'.' ws / '(' ws peg_expr ws ')' ws / '[' ws range_pair ws ']' ws / STRING_LITERAL / ntcall ws;
+	
+	st:STRING_LITERAL { 
+     String s = st;
+     s = s.substring(1, s.length()-1);
+     yyValue = factory.newLiteralPeg(s);
+   }
+  /
+   nt:ntcall ws {yyValue = nt;}
+  /
+   '[' ws v:range_pair ws ']' ws {yyValue = factory.newGroupPeg(v);}
+  /
+   '.' ws {yyValue = factory.newAnyPeg();}
+  /
+   '(' ws e:peg_expr ws ')' ws {yyValue = e;}
+;
+
+
+
+/*
+ntcall returns[PegNode peg]:
+   ID '<' actPars '>' {$peg = factory.newNonterminalPeg($ID.text, $actPars.list);}
+  |
+   ID {$peg = factory.newNonterminalPeg($ID.text, new ArrayList<ExprNode>());}
+;
+*/
+public PegNode ntcall = 
+//ID ws '<' ws actPars ws '>' ws / ID;
+
+	st:ID ws '<' ws e1:actPars ws '>' ws {yyValue = factory.newNonterminalPeg(st, e1);}
+  /
+	st1:ID ws {yyValue = factory.newNonterminalPeg(st1, new ArrayList<ExprNode>());}
+;
+
+
+
+/*
+range_pair:
+  single_pair
+ |
+  single_pair ('-' single_pair)+
+;
+*/
+public String range_pair = 
+//single_pair ws ( '-' ws single_pair)+ ws / single_pair ws;
+	
+	single_pair ('-' single_pair)+	
+	/	
+	single_pair
+;
+
+
+//Não mudou nada
+/*
+single_pair: ID | INT_NUMBER | ESC;
+*/
+public String single_pair = ESC / INT_NUMBER / ID;
+
+	

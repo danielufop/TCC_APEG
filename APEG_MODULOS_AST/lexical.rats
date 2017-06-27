@@ -1,0 +1,88 @@
+module lexical;
+import spacing;
+
+/*
+STRING_LITERAL: '\'' LITERAL_CHAR* '\'';
+*/
+public String STRING_LITERAL = '\'' LITERAL_CHAR* '\'';
+
+
+
+//DÚVIDA NESSA PARTE
+/*
+fragment LITERAL_CHAR
+  : ESC
+  | ~('\''|'\\')
+  ;
+*/
+transient private LITERAL_CHAR = (!('\'' / '\\') _ ); /* ('\'' | '\\')* / ESC
+
+
+/*
+ESC : '\\'
+    ( 'n'
+    | 'r'
+    | 't'
+    | 'b'
+    | 'f'
+    | '"'
+    | '\''
+    | '\\'
+    | 'u' XDIGIT XDIGIT XDIGIT XDIGIT
+    | . // unknown, leave as it is
+    )
+  ;
+*/
+public String ESC = '\\' ('n' / 'r' / 't' / 'b' / 'f' / '"' / '\'' / '\\' / 'u' XDIGIT XDIGIT XDIGIT XDIGIT / '_') ;
+
+/*
+fragment XDIGIT :
+    '0' .. '9'
+  | 'a' .. 'f'
+  | 'A' .. 'F'
+  ;
+*/
+transient private XDIGIT = [0-9a-fA-F];
+
+
+/*
+fragment LETTER : 'a'..'z' | 'A'..'Z';
+*/
+transient private LETTER = [a-z];
+
+
+/*
+fragment DIGIT : '0'..'9';
+*/
+transient private DIGIT = [0-9];
+
+
+/*
+TRUE : 'true';
+FALSE : 'false';
+ID : LETTER (LETTER | DIGIT | '_')*;
+INT_NUMBER : DIGIT+;
+*/
+public String TRUE = "true" ws;
+public String FALSE = "false" ws;
+public String ID = (LETTER / DIGIT / '_')*;
+public String INT_NUMBER = DIGIT+;
+
+
+
+
+/*
+REAL_NUMBER :
+  DIGIT+ ('.' DIGIT*)? EXPONENT?
+  |
+  '.' DIGIT+ EXPONENT?
+  ;
+*/
+public String REAL_NUMBER = '.' DIGIT+ EXPOENT?  / DIGIT+ ('.' DIGIT*)? EXPOENT?;
+
+
+
+/*
+fragment EXPONENT : ('e'|'E') ('+'|'-')? DIGIT+ ;
+*/
+transient private String EXPOENT = ('e' / 'E') ('+' / '-' )? DIGIT+;

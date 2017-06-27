@@ -1,0 +1,87 @@
+module option;
+import spacing;
+
+
+/*
+option returns[List<apeg.parse.ast.GrammarNode.GrammarOption> list]:
+   {$list = new ArrayList<apeg.parse.ast.GrammarNode.GrammarOption>();}
+   'options' '{' (r=grammar_opt {$list.add($r.opt);} ';')* '}'
+  |
+   {$list = new ArrayList<apeg.parse.ast.GrammarNode.GrammarOption>();}
+;
+*/
+public List<apeg.parse.ast.GrammarNode.GrammarOption> option = 
+//	"options" ws? '{' ws? (grammar_opt ';')* ws? '}';
+	
+	{yyValue = new ArrayList<apeg.parse.ast.GrammarNode.GrammarOption>();}
+	"options" ws? '{' ws? (r:grammar_opt {yyValue.add(r);} ';')* ws? '}'
+	/
+	{yyValue = new ArrayList<apeg.parse.ast.GrammarNode.GrammarOption>();}
+;
+
+
+
+
+/*
+grammar_opt returns[apeg.parse.ast.GrammarNode.GrammarOption opt]:
+  'isAdaptable' '=' 
+	('true' {$opt = apeg.parse.ast.GrammarNode.GrammarOption.ADAPTABLE;}
+  |	'false' {$opt = apeg.parse.ast.GrammarNode.GrammarOption.NO_ADAPTABLE;}
+	)
+ |
+  'memoize' '='
+   ('true' {$opt = apeg.parse.ast.GrammarNode.GrammarOption.MEMOIZE;}
+  | 'false' {$opt = apeg.parse.ast.GrammarNode.GrammarOption.NO_MEMOIZE;}
+  )
+ |
+  'envSemantics' '='
+   ('simple' {$opt = apeg.parse.ast.GrammarNode.GrammarOption.SIMPLE_ENV_SEMANTICS;}
+  | 'discardChangesWhenFail'
+         {$opt = apeg.parse.ast.GrammarNode.GrammarOption.USUAL_SEMANTICS;}
+  )
+;
+*/
+public apeg.parse.ast.GrammarNode.GrammarOption grammar_opt = 
+//	"isAdaptable" ws? '=' ws? ("true" / "false") / "memoize" ws? '=' ws? ("true" / "false")  / "envSemantics" ws? '=' ws? ("simple" / "discardChangeWhenFail");
+
+
+	"isAdaptable" ws? '=' ws? 
+   ("true" {yyValue = apeg.parse.ast.GrammarNode.GrammarOption.ADAPTABLE;} / "false" {yyValue = apeg.parse.ast.GrammarNode.GrammarOption.NO_ADAPTABLE;})
+ /
+	"memoize" ws? '=' ws?
+   ("true" {yyValue = apeg.parse.ast.GrammarNode.GrammarOption.MEMOIZE;} / "false" {yyValue = apeg.parse.ast.GrammarNode.GrammarOption.NO_MEMOIZE;})
+ /
+	"envSemantics" ws? '=' ws? ("simple" {yyValue = apeg.parse.ast.GrammarNode.GrammarOption.SIMPLE_ENV_SEMANTICS;} / "discardChangesWhenFail"{yyValue = apeg.parse.ast.GrammarNode.GrammarOption.USUAL_SEMANTICS;})
+;
+	
+	
+	
+	
+/*
+NÃO SEI SE PRECISA COLOCAR ESSA PARTE, QUALQUER COISA SÓ APAGAR
+*/
+
+
+/*
+header returns[String h]:
+    'header" '{' r=h_text {$h = $r.text;} '}'
+   |
+    {$h = "";}
+;
+
+h_text:
+  (.*?);
+*/
+public String header = 
+//	"header" ws? '{' ws? h_text ws? '}' ws;
+	
+	"header" ws? '{' ws? r:h_text ws? {yyValue = r;} ws '}'
+   /
+    {yyValue = "";}
+;
+	
+
+public String h_text = 
+	_*;
+//	(.*?);
+

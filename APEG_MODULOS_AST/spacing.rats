@@ -1,0 +1,14 @@
+module spacing;
+
+/*
+WS : (' ' | '\t' | '\r' | '\n') { skip(); } ;
+*/
+public String ws = (' ' / '\t' / '\r'? '\n' / '\r')+;
+
+
+public String COMMENT = "/*" '_'* "*/";
+
+/*
+LINE_COMMENT : '//' ~('\n'|'\r')* '\r'? '\n' { skip(); } ;
+*/
+public String LINE_COMENT =  "//" (!('\n' / '\r')_)* '\r'? '\n';

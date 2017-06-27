@@ -1,0 +1,25 @@
+module types;
+import spacing;
+
+//APEG Types
+
+/*
+INT_TYPE: "int";
+FLOAT_TYPE: "float";
+BOOLEAN_TYPE: "boolean";
+STRING_TYPE: "string";
+GRAMMAR_TYPE: "grammar";
+RULE_TYPE: "rule";
+*/
+
+public String INT_TYPE = "int" ws;
+
+public String FLOAT_TYPE = "float" ws;
+
+public String BOOLEAN_TYPE = "boolean" ws;
+
+public String STRING_TYPE = "string" ws;
+
+public String GRAMMAR_TYPE = "grammar" ws;
+
+public String RULE_TYPE = "rule" ws;

@@ -1,0 +1,69 @@
+module grammar_rule;
+import lexical;
+import attributes;
+import expression;
+import spacing;
+import apeg_expression;
+
+
+/*
+rules returns[List<apeg.parse.ast.RuleNode> list]:
+   {$list = new ArrayList<apeg.parse.ast.RuleNode>();}
+   (r=production {$list.add($r.rule);})+
+;
+*/
+public List<apeg.parse.ast.RuleNode> rules = 
+	(production)+ {yyValue = new ArrayList<apeg.parse.ast.RuleNode>();}
+	(r:production {yyValue.add(r);})+
+;
+	
+	
+	
+/*
+production returns[apeg.parse.ast.RuleNode rule]:
+   annotation ID optDecls optReturn optLocals ':' peg_expr ';'
+   {$rule = factory.newRule($ID.text, $annotation.anno, $optDecls.list,
+   	                        $optReturn.list, $peg_expr.peg);
+   }
+  |
+   ID optDecls optReturn optLocals ':' peg_expr ';'
+   {$rule = factory.newRule($ID.text, apeg.parse.ast.RuleNode.Annotation.NONE,
+   	                        $optDecls.list, $optReturn.list, $peg_expr.peg);
+   }
+;
+*/
+public apeg.parse.ast.RuleNode production = 
+//	annotation ws ID ws optDecls ws optReturn ws optLocals ws? ':' ws? peg_expr ws? ';' / ID ws optDecls ws optReturn ws optLocals ws? ':' ws? peg_expr ws? ';';
+	
+   an:annotation ws st:ID ws op:optDecls ws opr:optReturn ws optLocals ws? ':' ws? ep:peg_expr ws? ';'
+   {yyValue = factory.newRule(st, an, op, opr, ep);
+   }
+  /
+   st1:ID ws op1:optDecls ws opr1:optReturn ws opl:optLocals ws ':' ws ep1:peg_expr ws ';'
+   {yyValue = factory.newRule(st1, apeg.parse.ast.RuleNode.Annotation.NONE,
+   	                        op1, opr1, ep1);
+   }
+;
+
+
+
+/*
+annotation returns[apeg.parse.ast.RuleNode.Annotation anno]:
+   // to use together with the option memoize=false
+   "@memoize" {$anno = apeg.parse.ast.RuleNode.Annotation.MEMOIZE;}
+  /
+   // to use together with the option memoize=true
+   "@transient" {$anno = apeg.parse.ast.RuleNode.Annotation.TRANSIENT;}
+  ;
+*/
+
+
+public apeg.parse.ast.RuleNode.Annotation annotation = 
+//	"@memoize" ws / "@transient" ws;
+	
+   // to use together with the option memoize=false
+   "@memoize" ws {yyValue = apeg.parse.ast.RuleNode.Annotation.MEMOIZE;}
+  /
+   // to use together with the option memoize=true
+   "@transient" ws {yyValue = apeg.parse.ast.RuleNode.Annotation.TRANSIENT;}
+  ;
